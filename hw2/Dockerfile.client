@@ -1,0 +1,7 @@
+FROM alpine
+RUN apk update && apk add mysql-client
+WORKDIR /opt/hll
+COPY ./test.sql ./
+COPY ./dbinit.sh ./
+RUN chmod +x /opt/hll/dbinit.sh
+CMD /opt/hll/dbinit.sh && top

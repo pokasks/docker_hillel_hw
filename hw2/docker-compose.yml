@@ -1,0 +1,30 @@
+version: '3'
+services:
+  mysqldb-hillel:
+    image: 'mysql'
+    container_name: mysqldb
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: '1q2w3e4r5t!'
+      MYSQL_DATABASE: 'db1'
+      MYSQL_USER: 'db1_u01'
+      MYSQL_PASSWORD: 'u01secret'
+    ports:
+      - '33060:3306'
+    volumes:
+      - './db_data:/var/lib/mysql'
+      - './db_log:/var/log/mysql'
+    networks:
+      - "docker-swarm"
+  mysqlclient-hillel:
+    container_name: mysqlclient
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    depends_on:
+      - mysqldb-hillel
+    networks:
+      - "docker-swarm"
+networks:
+  docker-swarm:
